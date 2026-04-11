@@ -8,12 +8,12 @@ Backend API service for Chitti Bhishi with:
 
 ## Scripts
 
-- `npm run dev --workspace api` - Start Next.js API server on port 4000
-- `npm run build --workspace api` - Build the Next.js API app
-- `npm run start --workspace api` - Start built Next.js server on port 4000
-- `npm run prisma:migrate:dev --workspace api` - Create/apply migrations in development
-- `npm run prisma:migrate:deploy --workspace api` - Apply committed migrations
-- `npm run prisma:generate --workspace api` - Generate Prisma client
+- `npm run dev --workspace backend` - Start Next.js API server on port 4000
+- `npm run build --workspace backend` - Build the Next.js API app
+- `npm run start --workspace backend` - Start built Next.js server on port 4000
+- `npm run prisma:migrate:dev --workspace backend` - Create/apply migrations in development
+- `npm run prisma:migrate:deploy --workspace backend` - Apply committed migrations
+- `npm run prisma:generate --workspace backend` - Generate Prisma client
 
 ## Endpoints
 
@@ -32,7 +32,7 @@ Backend API service for Chitti Bhishi with:
 
 ## Environment Variables
 
-Create `api/.env` from `.env.example` and set:
+Create `backend/.env` from `.env.example` and set:
 
 ```env
 DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DB_NAME?sslmode=require"
