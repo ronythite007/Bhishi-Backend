@@ -1,27 +1,44 @@
 import { NextResponse, type NextRequest } from "next/server";
 
+function normalizeOrigin(origin: string): string {
+  return origin.trim().replace(/\/$/, "");
+}
+
 function getAllowedOrigins(): string[] {
   const configured = process.env.FRONTEND_ORIGIN?.trim();
   if (configured) {
     return configured
       .split(",")
-      .map((origin) => origin.trim())
+      .map((origin) => normalizeOrigin(origin))
       .filter(Boolean);
   }
 
-  return ["http://localhost:5173", "http://localhost:5174"];
+  return ["http://localhost:5173", "http://localhost:5174", "https://bhishi-frontend.vercel.app"];
+}
+
+function originMatches(origin: string, allowedOrigin: string): boolean {
+  if (allowedOrigin === origin) return true;
+
+  // Supports patterns like "https://*.vercel.app".
+  if (allowedOrigin.includes("*")) {
+    const regex = new RegExp(`^${allowedOrigin.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*")}$`, "i");
+    return regex.test(origin);
+  }
+
+  return false;
 }
 
 function applyCorsHeaders(request: NextRequest, response: NextResponse): NextResponse {
   const origin = request.headers.get("origin");
   const allowedOrigins = getAllowedOrigins();
+  const normalizedOrigin = origin ? normalizeOrigin(origin) : null;
 
-  if (origin && allowedOrigins.includes(origin)) {
-    response.headers.set("Access-Control-Allow-Origin", origin);
+  if (normalizedOrigin && allowedOrigins.some((allowedOrigin) => originMatches(normalizedOrigin, allowedOrigin))) {
+    response.headers.set("Access-Control-Allow-Origin", normalizedOrigin);
     response.headers.set("Access-Control-Allow-Credentials", "true");
-    response.headers.set("Vary", "Origin");
   }
 
+  response.headers.set("Vary", "Origin, Access-Control-Request-Headers, Access-Control-Request-Method");
   response.headers.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
 
   const requestedHeaders = request.headers.get("access-control-request-headers");

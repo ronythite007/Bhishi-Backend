@@ -18,10 +18,11 @@ export async function POST(request: Request) {
   try {
     const session = await loginUser(parsed.data.email, parsed.data.password);
     const response = NextResponse.json({ data: session.user }, { status: 200 });
+    const isProduction = process.env.NODE_ENV === "production";
     response.cookies.set("auth_token", session.token, {
       httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
+      sameSite: isProduction ? "none" : "lax",
+      secure: isProduction,
       path: "/",
       expires: new Date(session.expiresAt),
     });
