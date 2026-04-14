@@ -13,7 +13,12 @@ function getAllowedOrigins(): string[] {
       .filter(Boolean);
   }
 
-  return ["http://localhost:5173", "http://localhost:5174", "https://bhishi-frontend.vercel.app"];
+  return [
+    "http://localhost:*",
+    "http://127.0.0.1:*",
+    "https://*.vercel.app",
+    "https://bhishi-frontend.vercel.app",
+  ];
 }
 
 function originMatches(origin: string, allowedOrigin: string): boolean {

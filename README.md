@@ -38,3 +38,5 @@ Create `backend/.env` from `.env.example` and set:
 DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DB_NAME?sslmode=require"
 FRONTEND_ORIGIN="http://localhost:5173,http://localhost:5174"
 ```
+
+`FRONTEND_ORIGIN` supports a comma-separated allowlist and wildcard patterns such as `https://*.vercel.app`.
